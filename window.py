@@ -14,7 +14,7 @@ def setData():
         "question": "เนื้อหิน",
         "choices": {
             "เม็ดกรวด": {
-                "answer": "หินกรวดมน",
+                "answer": "หินกรวดมน"
             },
             "ละเอียด": {
                 "question": "รอยขนานเป็นชั้น",
@@ -23,10 +23,10 @@ def setData():
                         "question": "เนื้อแน่น",
                         "choices": {
                             "ใช่": {
-                                "answer": "หินชนวน",
+                                "answer": "หินชนวน"
                             },
                             "ไม่ใช่": {
-                                "answer": "หินดินดาน",
+                                "answer": "หินดินดาน"
                             }
                         }
                     },
@@ -34,19 +34,19 @@ def setData():
                         "question": "ทำปฏิกิริยากับกรด",
                         "choices": {
                             "ใช่": {
-                                "answer": "หินชนวน",
+                                "answer": "หินชนวน"
                             },
                             "ไม่ใช่": {
                                 "question": "ตรวจสี",
                                 "choices": {
                                     "สีเทาอ่อน มีรูพรุน": {
-                                        "answer": "หินพัมมิซ",
+                                        "answer": "หินพัมมิซ"
                                     },
                                     "สีเทา": {
-                                        "answer": "หินบะซอลต์",
+                                        "answer": "หินบะซอลต์"
                                     },
                                     "สีเทาดำ": {
-                                        "answer": "หินไดออไรต์",
+                                        "answer": "หินไดออไรต์"
                                     }
                                 }
                             }
@@ -61,22 +61,22 @@ def setData():
                         "question": "ริ้วหยัก",
                         "choices": {
                             "ใช่": {
-                                "answer": "หินไนซ์",
+                                "answer": "หินไนซ์"
                             },
                             "ไม่ใช่": {
                                 "question": "ผลึกแร่ 3 ชนิด",
                                 "choices": {
                                     "ใช่": {
-                                        "answer": "หินแกรนิต",
+                                        "answer": "หินแกรนิต"
                                     },
                                     "ไม่ใช่": {
                                         "question": "ทำปฏิกิริยากับกรด",
                                         "choices": {
                                             "ใช่": {
-                                                "answer": "หินอ่อน",
+                                                "answer": "หินอ่อน"
                                             },
                                             "ไม่ใช่": {
-                                                "answer": "หินควอร์ตไซต์",
+                                                "answer": "หินควอร์ตไซต์"
                                             }
                                         }
                                     }
@@ -85,10 +85,10 @@ def setData():
                         }
                     },
                     "ไม่แข็งแรง": {
-                        "answer": "หินทราย",
+                        "answer": "หินทราย"
                     }
                 }
-            },
+            }
         }
     }
 
@@ -119,19 +119,20 @@ authorPage.pack_propagate(False)
 # Images
 authorImage = ImageTk.PhotoImage(Image.open("./asset/author.jpg"))
 
-
+# Initial of Recursion A
 def startForm():
     setData()
     classifierForm(CLASSIFIER)
 
-
+# Recursive Case of Recursion A
 def selectedChoice(window, dictData):
     window.destroy()
     classifierForm(dictData)
 
-
+# Recursion B: Display Choice with Dictionary of Choices and Cut Out Unused Part of Dictionary
+# Note: I use recursion in this part to prevent the overlap of temporary variable.
 def createChoices(window, page, choisesDict):
-    if(len(choisesDict) > 0):
+    if len(choisesDict) > 0:
         choice = next(iter(choisesDict))
         subDictData = choisesDict[choice]
         choisesDict.pop(choice)
@@ -139,7 +140,7 @@ def createChoices(window, page, choisesDict):
             side=tk.TOP, expand=True)
         createChoices(window, page, choisesDict)
 
-
+# Recursion A: Display Form Window with Dictionary of Data and call Nest Recursion for Create Choices
 def classifierForm(dictData):
     window = Tk()
     Style(window).configure("header.TLabel", font=(
@@ -150,7 +151,7 @@ def classifierForm(dictData):
         FONT_FAMILY, FONT_SIZE_BODY, "bold"))
     page = Frame(window, width=WIDTH_FRAME,
                  height=HEIGHT_FRAME, padding=PADDING_FRAME)
-    if(len(dictData) > 1):
+    if len(dictData) > 1:
         Label(page, text=dictData["question"], style="header.TLabel").pack(
             side=tk.TOP, expand=True)
         createChoices(window, page, dictData["choices"])
@@ -166,7 +167,7 @@ def classifierForm(dictData):
     window.geometry("720x480+400+150")
     window.mainloop()
 
-
+# One Time Change Page for Lambda Function
 def changePage(firstPage, secondPage):
     firstPage.pack_forget()
     secondPage.pack()
