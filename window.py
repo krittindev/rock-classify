@@ -14,7 +14,8 @@ def setData():
         "question": "เนื้อหิน",
         "choices": {
             "เม็ดกรวด": {
-                "answer": "หินกรวดมน"
+                "answer": "หินกรวดมน",
+                "url": "./asset/rocks/conglomerate.jpg"
             },
             "ละเอียด": {
                 "question": "รอยขนานเป็นชั้น",
@@ -23,10 +24,12 @@ def setData():
                         "question": "เนื้อแน่น",
                         "choices": {
                             "ใช่": {
-                                "answer": "หินชนวน"
+                                "answer": "หินชนวน",
+                                "url": "./asset/rocks/slate.jpg"
                             },
                             "ไม่ใช่": {
-                                "answer": "หินดินดาน"
+                                "answer": "หินดินดาน",
+                                "url": "./asset/rocks/shale.jpg"
                             }
                         }
                     },
@@ -34,19 +37,23 @@ def setData():
                         "question": "ทำปฏิกิริยากับกรด",
                         "choices": {
                             "ใช่": {
-                                "answer": "หินชนวน"
+                                "answer": "หินปูน",
+                                "url": "./asset/rocks/limestone.jpg"
                             },
                             "ไม่ใช่": {
                                 "question": "ตรวจสี",
                                 "choices": {
                                     "สีเทาอ่อน มีรูพรุน": {
-                                        "answer": "หินพัมมิซ"
+                                        "answer": "หินพัมมิซ",
+                                        "url": "./asset/rocks/pumice.jpg"
                                     },
                                     "สีเทา": {
-                                        "answer": "หินบะซอลต์"
+                                        "answer": "หินบะซอลต์",
+                                        "url": "./asset/rocks/basalt.jpg"
                                     },
                                     "สีเทาดำ": {
-                                        "answer": "หินไดออไรต์"
+                                        "answer": "หินไดออไรต์",
+                                        "url": "./asset/rocks/rhyolite.jpg"
                                     }
                                 }
                             }
@@ -61,22 +68,26 @@ def setData():
                         "question": "ริ้วหยัก",
                         "choices": {
                             "ใช่": {
-                                "answer": "หินไนซ์"
+                                "answer": "หินไนซ์",
+                                "url": "./asset/rocks/gneiss.jpg"
                             },
                             "ไม่ใช่": {
                                 "question": "ผลึกแร่ 3 ชนิด",
                                 "choices": {
                                     "ใช่": {
-                                        "answer": "หินแกรนิต"
+                                        "answer": "หินแกรนิต",
+                                        "url": "./asset/rocks/granite.jpg"
                                     },
                                     "ไม่ใช่": {
                                         "question": "ทำปฏิกิริยากับกรด",
                                         "choices": {
                                             "ใช่": {
-                                                "answer": "หินอ่อน"
+                                                "answer": "หินอ่อน",
+                                                "url": "./asset/rocks/marble.jpg"
                                             },
                                             "ไม่ใช่": {
-                                                "answer": "หินควอร์ตไซต์"
+                                                "answer": "หินควอร์ตไซต์",
+                                                "url": "./asset/rocks/quartzite.jpg"
                                             }
                                         }
                                     }
@@ -85,7 +96,8 @@ def setData():
                         }
                     },
                     "ไม่แข็งแรง": {
-                        "answer": "หินทราย"
+                        "answer": "หินทราย",
+                        "url": "./asset/rocks/sandstone.jpg"
                     }
                 }
             }
@@ -99,10 +111,13 @@ root = Tk()
 FONT_FAMILY = "TH SarabunPSK"
 FONT_SIZE_HEADER = 36
 FONT_SIZE_BODY = 20
+FONT_SIZE_BODY_AUTHOR = 10
 Style(root).configure("header.TLabel", font=(
     FONT_FAMILY, FONT_SIZE_HEADER, "bold"))
 Style(root).configure("body.TLabel", font=(
     FONT_FAMILY, FONT_SIZE_BODY, "bold"))
+Style(root).configure("bodyAuthor.TLabel", font=(
+    FONT_FAMILY, FONT_SIZE_BODY_AUTHOR, "bold"))
 Style(root).configure("TButton", font=(FONT_FAMILY, FONT_SIZE_BODY, "bold"))
 
 # Pages
@@ -112,12 +127,17 @@ PADDING_FRAME = 50
 homePage = Frame(root, width=WIDTH_FRAME,
                  height=HEIGHT_FRAME, padding=PADDING_FRAME)
 authorPage = Frame(root, width=WIDTH_FRAME,
-                   height=HEIGHT_FRAME, padding=PADDING_FRAME)
+                   height=HEIGHT_FRAME, padding=0)
+flowchartPage = Frame(root, width=1920,
+                   height=1080, padding=5)
 homePage.pack_propagate(False)
 authorPage.pack_propagate(False)
+flowchartPage.pack_propagate(False)
 
 # Images
-authorImage = ImageTk.PhotoImage(Image.open("./asset/author.jpg"))
+author1Image = ImageTk.PhotoImage(Image.open("./asset/author_1.jpg"))
+author2Image = ImageTk.PhotoImage(Image.open("./asset/author_2.png"))
+flowChartImage = ImageTk.PhotoImage(Image.open("./asset/flowchart.jpg"))
 
 # Initial of Recursion A
 def startForm():
@@ -151,17 +171,23 @@ def classifierForm(dictData):
         FONT_FAMILY, FONT_SIZE_BODY, "bold"))
     page = Frame(window, width=WIDTH_FRAME,
                  height=HEIGHT_FRAME, padding=PADDING_FRAME)
-    if len(dictData) > 1:
+    Button(page, text="ออก", style="TButton",
+           command=window.destroy).pack(side=tk.BOTTOM, expand=False)
+    Separator(page, orient="horizontal").pack(
+        side=tk.BOTTOM, fill=tk.X, pady=20)
+    if "question" in dictData:
         Label(page, text=dictData["question"], style="header.TLabel").pack(
             side=tk.TOP, expand=True)
         createChoices(window, page, dictData["choices"])
     else:
         Label(page, text=dictData["answer"], style="header.TLabel").pack(
             side=tk.TOP, expand=True)
-    Button(page, text="ออก", style="TButton",
-           command=window.destroy).pack(side=tk.BOTTOM, expand=False)
-    Separator(page, orient="horizontal").pack(
-        side=tk.BOTTOM, fill=tk.X, pady=20)
+        # stoneImage = ImageTk.PhotoImage(Image.open(dictData["url"]))
+        # stoneLabel = Label(page, image=stoneImage)
+        # stoneLabel.image = stoneImage
+        # stoneLabel.pack(side=tk.TOP, expand=True)
+        Button(page, text="แสดงรายละเอียด", style="TButton",
+            command=window.destroy).pack(side=tk.BOTTOM, expand=False)
     page.pack_propagate(False)
     page.pack()
     window.geometry("720x480+400+150")
@@ -180,22 +206,34 @@ Button(homePage, text="จำแนกหิน", style="TButton", command=start
     side=tk.TOP, expand=True)
 Button(homePage, text="ผู้จัดทำ", style="TButton", command=lambda: changePage(
     homePage, authorPage)).pack(side=tk.TOP, expand=True)
-Button(homePage, text="ผังงาน", style="TButton", command=lambda: webbrowser.open(
-    FLOWCHART_URL)).pack(side=tk.TOP, expand=True)
+Button(homePage, text="ผังงาน", style="TButton", command=lambda: changePage(
+    homePage, flowchartPage)).pack(side=tk.TOP, expand=True)
 Button(homePage, text="ออก", style="TButton",
        command=root.destroy).pack(side=tk.TOP, expand=True)
 
-# widgets of Author Page
-Label(authorPage, text="จัดทำโดย", style="header.TLabel").pack(side=tk.TOP)
-Label(authorPage, image=authorImage).pack(side=tk.TOP, expand=True)
+# widgets of Author Page with grid
+Label(authorPage, text="จัดทำโดย", style="header.TLabel").grid(row = 0, column = 0, columnspan = 2, pady=PADDING_FRAME)
+Label(authorPage, image=author1Image).grid(row = 1, column = 0)
+Label(authorPage, image=author2Image).grid(row = 1, column = 1)
 Label(authorPage, text="นายธนกร  แสงจันทร์",
-      style="body.TLabel").pack(side=tk.TOP, expand=True)
+      style="bodyAuthor.TLabel").grid(row = 2, column = 0)
+Label(authorPage, text="นายสตินันต์ เเสงเเก้ว",
+      style="bodyAuthor.TLabel").grid(row = 2, column = 1)
 Label(authorPage, text="เลขที่ 9 ชั้นมัธยมศึกษาปีที่ 4/1 (โอเมก้า)",
-      style="body.TLabel").pack(side=tk.TOP, expand=True)
+      style="bodyAuthor.TLabel").grid(row = 3, column = 0, padx=20)
+Label(authorPage, text="เลขที่ 12 ชั้นมัธยมศึกษาปีที่ 4/1 (โอเมก้า)",
+      style="bodyAuthor.TLabel").grid(row = 3, column = 1, padx=20)
 Button(authorPage, text="ออก", style="TButton", command=lambda: changePage(
-    authorPage, homePage)).pack(side=tk.BOTTOM, expand=False)
-Separator(authorPage, orient="horizontal").pack(
-    side=tk.BOTTOM, fill=tk.X, pady=20)
+    authorPage, homePage)).grid(row = 5, column = 0, columnspan = 2, pady=PADDING_FRAME)
+
+# widgets of Flowchart Page with grid
+Label(flowchartPage, text="ผังงาน", style="header.TLabel").grid(row = 0, column = 0, columnspan = 2)
+Label(flowchartPage, image=flowChartImage).grid(row = 1, column = 0, columnspan = 2)
+Separator(flowchartPage, orient="horizontal").grid(row = 3, column = 0, columnspan = 2)
+Button(flowchartPage, text="ภาพเต็ม", style="TButton", command=lambda: webbrowser.open(
+    FLOWCHART_URL)).grid(row=4, column=0)
+Button(flowchartPage, text="ออก", style="TButton", command=lambda: changePage(
+    flowchartPage, homePage)).grid(row=4, column=1)
 
 # Start Program
 homePage.pack()
