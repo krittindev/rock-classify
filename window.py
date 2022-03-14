@@ -5,6 +5,7 @@ from tkinter.ttk import Frame, Label, Button, Style, Separator
 import webbrowser
 
 FLOWCHART_URL = 'https://60bb44df-a-62cb3a1a-s-sites.googlegroups.com/site/bhxsci58/hnwy-kar-reiyn-ru/4-thrni-prawati/Slide2.JPG'
+ROCK_URL = 'https://raw.githubusercontent.com/tuliptgr/rock-classify/main/'
 CLASSIFIER = {}
 
 
@@ -111,7 +112,7 @@ root = Tk()
 FONT_FAMILY = "TH SarabunPSK"
 FONT_SIZE_HEADER = 36
 FONT_SIZE_BODY = 20
-FONT_SIZE_BODY_AUTHOR = 10
+FONT_SIZE_BODY_AUTHOR = 15
 Style(root).configure("header.TLabel", font=(
     FONT_FAMILY, FONT_SIZE_HEADER, "bold"))
 Style(root).configure("body.TLabel", font=(
@@ -129,7 +130,7 @@ homePage = Frame(root, width=WIDTH_FRAME,
 authorPage = Frame(root, width=WIDTH_FRAME,
                    height=HEIGHT_FRAME, padding=0)
 flowchartPage = Frame(root, width=1920,
-                   height=1080, padding=5)
+                      height=1080, padding=5)
 homePage.pack_propagate(False)
 authorPage.pack_propagate(False)
 flowchartPage.pack_propagate(False)
@@ -140,17 +141,23 @@ author2Image = ImageTk.PhotoImage(Image.open("./asset/author_2.png"))
 flowChartImage = ImageTk.PhotoImage(Image.open("./asset/flowchart.jpg"))
 
 # Initial of Recursion A
+
+
 def startForm():
     setData()
     classifierForm(CLASSIFIER)
 
 # Recursive Case of Recursion A
+
+
 def selectedChoice(window, dictData):
     window.destroy()
     classifierForm(dictData)
 
 # Recursion B: Display Choice with Dictionary of Choices and Cut Out Unused Part of Dictionary
 # Note: I use recursion in this part to prevent the overlap of temporary variable.
+
+
 def createChoices(window, page, choisesDict):
     if len(choisesDict) > 0:
         choice = next(iter(choisesDict))
@@ -161,6 +168,8 @@ def createChoices(window, page, choisesDict):
         createChoices(window, page, choisesDict)
 
 # Recursion A: Display Form Window with Dictionary of Data and call Nest Recursion for Create Choices
+
+
 def classifierForm(dictData):
     window = Tk()
     Style(window).configure("header.TLabel", font=(
@@ -171,10 +180,6 @@ def classifierForm(dictData):
         FONT_FAMILY, FONT_SIZE_BODY, "bold"))
     page = Frame(window, width=WIDTH_FRAME,
                  height=HEIGHT_FRAME, padding=PADDING_FRAME)
-    Button(page, text="ออก", style="TButton",
-           command=window.destroy).pack(side=tk.BOTTOM, expand=False)
-    Separator(page, orient="horizontal").pack(
-        side=tk.BOTTOM, fill=tk.X, pady=20)
     if "question" in dictData:
         Label(page, text=dictData["question"], style="header.TLabel").pack(
             side=tk.TOP, expand=True)
@@ -186,14 +191,20 @@ def classifierForm(dictData):
         # stoneLabel = Label(page, image=stoneImage)
         # stoneLabel.image = stoneImage
         # stoneLabel.pack(side=tk.TOP, expand=True)
-        Button(page, text="แสดงรายละเอียด", style="TButton",
-            command=window.destroy).pack(side=tk.BOTTOM, expand=False)
+        Button(page, text="แสดงรายละเอียด", style="TButton", command=lambda: webbrowser.open(
+            ROCK_URL+dictData["url"][1:])).pack(side=tk.TOP, expand=True)
+    Button(page, text="ออก", style="TButton",
+           command=window.destroy).pack(side=tk.BOTTOM, expand=False)
+    Separator(page, orient="horizontal").pack(
+        side=tk.BOTTOM, fill=tk.X, pady=20)
     page.pack_propagate(False)
     page.pack()
     window.geometry("720x480+400+150")
     window.mainloop()
 
 # One Time Change Page for Lambda Function
+
+
 def changePage(firstPage, secondPage):
     firstPage.pack_forget()
     secondPage.pack()
@@ -212,24 +223,27 @@ Button(homePage, text="ออก", style="TButton",
        command=root.destroy).pack(side=tk.TOP, expand=True)
 
 # widgets of Author Page with grid
-Label(authorPage, text="จัดทำโดย", style="header.TLabel").grid(row = 0, column = 0, columnspan = 2, pady=PADDING_FRAME)
-Label(authorPage, image=author1Image).grid(row = 1, column = 0)
-Label(authorPage, image=author2Image).grid(row = 1, column = 1)
+Label(authorPage, text="จัดทำโดย", style="header.TLabel").grid(
+    row=0, column=0, columnspan=2, pady=PADDING_FRAME)
+Label(authorPage, image=author1Image).grid(row=1, column=0)
+Label(authorPage, image=author2Image).grid(row=1, column=1)
 Label(authorPage, text="นายธนกร  แสงจันทร์",
-      style="bodyAuthor.TLabel").grid(row = 2, column = 0)
+      style="bodyAuthor.TLabel").grid(row=2, column=0)
 Label(authorPage, text="นายสตินันต์ เเสงเเก้ว",
-      style="bodyAuthor.TLabel").grid(row = 2, column = 1)
+      style="bodyAuthor.TLabel").grid(row=2, column=1)
 Label(authorPage, text="เลขที่ 9 ชั้นมัธยมศึกษาปีที่ 4/1 (โอเมก้า)",
-      style="bodyAuthor.TLabel").grid(row = 3, column = 0, padx=20)
+      style="bodyAuthor.TLabel").grid(row=3, column=0, padx=20)
 Label(authorPage, text="เลขที่ 12 ชั้นมัธยมศึกษาปีที่ 4/1 (โอเมก้า)",
-      style="bodyAuthor.TLabel").grid(row = 3, column = 1, padx=20)
+      style="bodyAuthor.TLabel").grid(row=3, column=1, padx=20)
 Button(authorPage, text="ออก", style="TButton", command=lambda: changePage(
-    authorPage, homePage)).grid(row = 5, column = 0, columnspan = 2, pady=PADDING_FRAME)
+    authorPage, homePage)).grid(row=5, column=0, columnspan=2, pady=PADDING_FRAME)
 
 # widgets of Flowchart Page with grid
-Label(flowchartPage, text="ผังงาน", style="header.TLabel").grid(row = 0, column = 0, columnspan = 2)
-Label(flowchartPage, image=flowChartImage).grid(row = 1, column = 0, columnspan = 2)
-Separator(flowchartPage, orient="horizontal").grid(row = 3, column = 0, columnspan = 2)
+Label(flowchartPage, text="ผังงาน", style="header.TLabel").grid(
+    row=0, column=0, columnspan=2)
+Label(flowchartPage, image=flowChartImage).grid(row=1, column=0, columnspan=2)
+Separator(flowchartPage, orient="horizontal").grid(
+    row=3, column=0, columnspan=2)
 Button(flowchartPage, text="ภาพเต็ม", style="TButton", command=lambda: webbrowser.open(
     FLOWCHART_URL)).grid(row=4, column=0)
 Button(flowchartPage, text="ออก", style="TButton", command=lambda: changePage(
