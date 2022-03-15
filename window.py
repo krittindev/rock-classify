@@ -126,13 +126,13 @@ WIDTH_FRAME = 720
 HEIGHT_FRAME = 480
 PADDING_FRAME = 50
 homePage = Frame(root, width=WIDTH_FRAME,
-                 height=HEIGHT_FRAME, padding=PADDING_FRAME)
+                 height=HEIGHT_FRAME)
 formPage = Frame(root, width=WIDTH_FRAME,
-                 height=HEIGHT_FRAME, padding=0)
+                 height=HEIGHT_FRAME)
 authorPage = Frame(root, width=WIDTH_FRAME,
-                   height=HEIGHT_FRAME, padding=0)
-flowchartPage = Frame(root, width=1920,
-                      height=1080, padding=5)
+                   height=HEIGHT_FRAME)
+flowchartPage = Frame(root, width=WIDTH_FRAME,
+                      height=HEIGHT_FRAME)
 homePage.pack_propagate(False)
 formPage.pack_propagate(False)
 authorPage.pack_propagate(False)
@@ -142,7 +142,15 @@ flowchartPage.pack_propagate(False)
 author1Image = ImageTk.PhotoImage(Image.open("./asset/author_1.jpg"))
 author2Image = ImageTk.PhotoImage(Image.open("./asset/author_2.png"))
 flowChartImage = ImageTk.PhotoImage(Image.open("./asset/flowchart.jpg"))
-    
+homeBg = ImageTk.PhotoImage(Image.open(
+    "./asset/bg/home.png").resize((WIDTH_FRAME, HEIGHT_FRAME), Image.ANTIALIAS))
+authorBg = ImageTk.PhotoImage(Image.open(
+    "./asset/bg/author.png").resize((WIDTH_FRAME, HEIGHT_FRAME), Image.ANTIALIAS))
+flowChartBg = ImageTk.PhotoImage(Image.open(
+    "./asset/bg/flowchart.png").resize((WIDTH_FRAME, HEIGHT_FRAME), Image.ANTIALIAS))
+formBg = ImageTk.PhotoImage(Image.open(
+    "./asset/bg/form.png").resize((WIDTH_FRAME, HEIGHT_FRAME), Image.ANTIALIAS))
+
 
 # Recursion B: Display Choice with Dictionary of Choices and Cut Out Unused Part of Dictionary
 # Note: I use recursion in this part to prevent the overlap of temporary variable.
@@ -162,28 +170,31 @@ def createChoices(homePage, formPage, choisesDict):
 
 def classifierForm(homePage, formPage, dictData):
     for widget in formPage.winfo_children():
-       widget.destroy()
+        widget.destroy()
     formPage.pack_forget()
     if "question" in dictData:
+        Label(formPage, image=formBg).place(x=0, y=0)
         Label(formPage, text=dictData["question"], style="header.TLabel").pack(
-            side=tk.TOP, expand=True, pady=(50,20))
+            side=tk.TOP, expand=True, pady=(50, 20))
         createChoices(homePage, formPage, dictData["choices"])
         Button(formPage, text="ออก", style="TButton",
-            command=lambda: changePage(formPage, homePage)).pack(side=tk.BOTTOM, expand=False, pady=(0,50))
+               command=lambda: changePage(formPage, homePage)).pack(side=tk.BOTTOM, expand=False, pady=(0, 50))
         Separator(formPage, orient="horizontal").pack(
-            side=tk.BOTTOM, fill=tk.X, padx=50, pady=(0,20))
+            side=tk.BOTTOM, fill=tk.X, padx=50, pady=(0, 20))
     else:
-        stoneImage = ImageTk.PhotoImage(Image.open(dictData["url"]).resize((720,480), Image.ANTIALIAS))
+        stoneImage = ImageTk.PhotoImage(Image.open(dictData["url"]).resize((WIDTH_FRAME, HEIGHT_FRAME), Image.ANTIALIAS))
         stoneLabel = Label(formPage, image=stoneImage)
         stoneLabel.image = stoneImage
-        stoneLabel.place(x=0,y=0)
+        stoneLabel.place(x=0, y=0)
         Button(formPage, text="ออก", style="TButton",
-            command=lambda: changePage(formPage, homePage)).pack(side=tk.BOTTOM, expand=False, pady=20)
+               command=lambda: changePage(formPage, homePage)).pack(side=tk.BOTTOM, expand=False, pady=20)
     formPage.pack()
-            
+
+
 def changePage(firstPage, secondPage):
     firstPage.pack_forget()
     secondPage.pack()
+
 
 def startForm(homePage, formPage):
     setData()
@@ -192,9 +203,10 @@ def startForm(homePage, formPage):
 
 
 # widgets of Home Page
+Label(homePage, image=homeBg).place(x=0, y=0)
 Label(homePage, text="โปรแกรมจำแนกหิน", style="header.TLabel").pack(
     side=tk.TOP, expand=True)
-Button(homePage, text="จำแนกหิน", style="TButton", command = lambda: startForm(
+Button(homePage, text="จำแนกหิน", style="TButton", command=lambda: startForm(
     homePage, formPage)).pack(side=tk.TOP, expand=True)
 Button(homePage, text="ผู้จัดทำ", style="TButton", command=lambda: changePage(
     homePage, authorPage)).pack(side=tk.TOP, expand=True)
@@ -204,8 +216,9 @@ Button(homePage, text="ออก", style="TButton",
        command=root.destroy).pack(side=tk.TOP, expand=True)
 
 # widgets of Author Page with grid
+Label(authorPage, image=authorBg).place(x=0, y=0)
 Label(authorPage, text="จัดทำโดย", style="header.TLabel").grid(
-    row=0, column=0, columnspan=2, pady=PADDING_FRAME)
+    row=0, column=0, columnspan=2, pady=PADDING_FRAME, padx=300)
 Label(authorPage, image=author1Image).grid(row=1, column=0)
 Label(authorPage, image=author2Image).grid(row=1, column=1)
 Label(authorPage, text="นายธนกร  แสงจันทร์",
@@ -213,22 +226,23 @@ Label(authorPage, text="นายธนกร  แสงจันทร์",
 Label(authorPage, text="นายสตินันต์ เเสงเเก้ว",
       style="bodyAuthor.TLabel").grid(row=2, column=1)
 Label(authorPage, text="เลขที่ 9 ชั้นมัธยมศึกษาปีที่ 4/1 (โอเมก้า)",
-      style="bodyAuthor.TLabel").grid(row=3, column=0, padx=20)
+      style="bodyAuthor.TLabel").grid(row=3, column=0)
 Label(authorPage, text="เลขที่ 12 ชั้นมัธยมศึกษาปีที่ 4/1 (โอเมก้า)",
-      style="bodyAuthor.TLabel").grid(row=3, column=1, padx=20)
+      style="bodyAuthor.TLabel").grid(row=3, column=1)
 Button(authorPage, text="กลับ", style="TButton", command=lambda: changePage(
     authorPage, homePage)).grid(row=5, column=0, columnspan=2, pady=PADDING_FRAME)
 
 # widgets of Flowchart Page with grid
+Label(flowchartPage, image=flowChartBg).place(x=0, y=0)
 Label(flowchartPage, text="ผังงาน", style="header.TLabel").grid(
-    row=0, column=0, columnspan=2)
-Label(flowchartPage, image=flowChartImage).grid(row=1, column=0, columnspan=2)
+    row=0, column=0, columnspan=2, pady=5)
+Label(flowchartPage, image=flowChartImage).grid(row=1, column=0, columnspan=2, padx=100)
 Separator(flowchartPage, orient="horizontal").grid(
     row=3, column=0, columnspan=2)
 Button(flowchartPage, text="ภาพเต็ม", style="TButton", command=lambda: webbrowser.open(
     FLOWCHART_URL)).grid(row=4, column=0)
 Button(flowchartPage, text="กลับ", style="TButton", command=lambda: changePage(
-    flowchartPage, homePage)).grid(row=4, column=1)
+    flowchartPage, homePage)).grid(row=4, column=1, pady=5)
 
 # Start Program
 homePage.pack()
