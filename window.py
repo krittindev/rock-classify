@@ -127,11 +127,14 @@ HEIGHT_FRAME = 480
 PADDING_FRAME = 50
 homePage = Frame(root, width=WIDTH_FRAME,
                  height=HEIGHT_FRAME, padding=PADDING_FRAME)
+formPage = Frame(root, width=WIDTH_FRAME,
+                 height=HEIGHT_FRAME, padding=0)
 authorPage = Frame(root, width=WIDTH_FRAME,
                    height=HEIGHT_FRAME, padding=0)
 flowchartPage = Frame(root, width=1920,
                       height=1080, padding=5)
 homePage.pack_propagate(False)
+formPage.pack_propagate(False)
 authorPage.pack_propagate(False)
 flowchartPage.pack_propagate(False)
 
@@ -139,82 +142,60 @@ flowchartPage.pack_propagate(False)
 author1Image = ImageTk.PhotoImage(Image.open("./asset/author_1.jpg"))
 author2Image = ImageTk.PhotoImage(Image.open("./asset/author_2.png"))
 flowChartImage = ImageTk.PhotoImage(Image.open("./asset/flowchart.jpg"))
-
-# Initial of Recursion A
-
-
-def startForm():
-    setData()
-    classifierForm(CLASSIFIER)
-
-# Recursive Case of Recursion A
-
-
-def selectedChoice(window, dictData):
-    window.destroy()
-    classifierForm(dictData)
+    
 
 # Recursion B: Display Choice with Dictionary of Choices and Cut Out Unused Part of Dictionary
 # Note: I use recursion in this part to prevent the overlap of temporary variable.
 
 
-def createChoices(window, page, choisesDict):
+def createChoices(homePage, formPage, choisesDict):
     if len(choisesDict) > 0:
         choice = next(iter(choisesDict))
         subDictData = choisesDict[choice]
         choisesDict.pop(choice)
-        Button(page, text=choice, style="TButton", command=lambda: selectedChoice(window, subDictData)).pack(
+        Button(formPage, text=choice, style="TButton", command=lambda: classifierForm(homePage, formPage, subDictData)).pack(
             side=tk.TOP, expand=True)
-        createChoices(window, page, choisesDict)
+        createChoices(homePage, formPage, choisesDict)
 
 # Recursion A: Display Form Window with Dictionary of Data and call Nest Recursion for Create Choices
 
 
-def classifierForm(dictData):
-    window = Tk()
-    Style(window).configure("header.TLabel", font=(
-        FONT_FAMILY, FONT_SIZE_HEADER, "bold"))
-    Style(window).configure("body.TLabel", font=(
-        FONT_FAMILY, FONT_SIZE_BODY, "bold"))
-    Style(window).configure("TButton", font=(
-        FONT_FAMILY, FONT_SIZE_BODY, "bold"))
-    page = Frame(window, width=WIDTH_FRAME,
-                 height=HEIGHT_FRAME, padding=PADDING_FRAME)
+def classifierForm(homePage, formPage, dictData):
+    for widget in formPage.winfo_children():
+       widget.destroy()
+    formPage.pack_forget()
     if "question" in dictData:
-        Label(page, text=dictData["question"], style="header.TLabel").pack(
-            side=tk.TOP, expand=True)
-        createChoices(window, page, dictData["choices"])
+        Label(formPage, text=dictData["question"], style="header.TLabel").pack(
+            side=tk.TOP, expand=True, pady=(50,20))
+        createChoices(homePage, formPage, dictData["choices"])
+        Button(formPage, text="ออก", style="TButton",
+            command=lambda: changePage(formPage, homePage)).pack(side=tk.BOTTOM, expand=False, pady=(0,50))
+        Separator(formPage, orient="horizontal").pack(
+            side=tk.BOTTOM, fill=tk.X, padx=50, pady=(0,20))
     else:
-        Label(page, text=dictData["answer"], style="header.TLabel").pack(
-            side=tk.TOP, expand=True)
-        # stoneImage = ImageTk.PhotoImage(Image.open(dictData["url"]))
-        # stoneLabel = Label(page, image=stoneImage)
-        # stoneLabel.image = stoneImage
-        # stoneLabel.pack(side=tk.TOP, expand=True)
-        Button(page, text="แสดงรายละเอียด", style="TButton", command=lambda: webbrowser.open(
-            ROCK_URL+dictData["url"][1:])).pack(side=tk.TOP, expand=True)
-    Button(page, text="ออก", style="TButton",
-           command=window.destroy).pack(side=tk.BOTTOM, expand=False)
-    Separator(page, orient="horizontal").pack(
-        side=tk.BOTTOM, fill=tk.X, pady=20)
-    page.pack_propagate(False)
-    page.pack()
-    window.geometry("720x480+400+150")
-    window.mainloop()
-
-# One Time Change Page for Lambda Function
-
-
+        stoneImage = ImageTk.PhotoImage(Image.open(dictData["url"]).resize((720,480), Image.ANTIALIAS))
+        stoneLabel = Label(formPage, image=stoneImage)
+        stoneLabel.image = stoneImage
+        stoneLabel.place(x=0,y=0)
+        Button(formPage, text="ออก", style="TButton",
+            command=lambda: changePage(formPage, homePage)).pack(side=tk.BOTTOM, expand=False, pady=20)
+    formPage.pack()
+            
 def changePage(firstPage, secondPage):
     firstPage.pack_forget()
     secondPage.pack()
+
+def startForm(homePage, formPage):
+    setData()
+    classifierForm(homePage, formPage, CLASSIFIER)
+    changePage(homePage, formPage)
 
 
 # widgets of Home Page
 Label(homePage, text="โปรแกรมจำแนกหิน", style="header.TLabel").pack(
     side=tk.TOP, expand=True)
-Button(homePage, text="จำแนกหิน", style="TButton", command=startForm).pack(
-    side=tk.TOP, expand=True)
+Button(homePage, text="จำแนกหิน", style="TButton", command = lambda: startForm(
+    homePage, formPage)).pack(side=tk.TOP, expand=True)
 Button(homePage, text="ผู้จัดทำ", style="TButton", command=lambda: changePage(
     homePage, authorPage)).pack(side=tk.TOP, expand=True)
 Button(homePage, text="ผังงาน", style="TButton", command=lambda: changePage(
