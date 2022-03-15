@@ -216,7 +216,7 @@ Label(authorPage, text="เลขที่ 9 ชั้นมัธยมศึ�
       style="bodyAuthor.TLabel").grid(row=3, column=0, padx=20)
 Label(authorPage, text="เลขที่ 12 ชั้นมัธยมศึกษาปีที่ 4/1 (โอเมก้า)",
       style="bodyAuthor.TLabel").grid(row=3, column=1, padx=20)
-Button(authorPage, text="ออก", style="TButton", command=lambda: changePage(
+Button(authorPage, text="กลับ", style="TButton", command=lambda: changePage(
     authorPage, homePage)).grid(row=5, column=0, columnspan=2, pady=PADDING_FRAME)
 
 # widgets of Flowchart Page with grid
@@ -227,7 +227,7 @@ Separator(flowchartPage, orient="horizontal").grid(
     row=3, column=0, columnspan=2)
 Button(flowchartPage, text="ภาพเต็ม", style="TButton", command=lambda: webbrowser.open(
     FLOWCHART_URL)).grid(row=4, column=0)
-Button(flowchartPage, text="ออก", style="TButton", command=lambda: changePage(
+Button(flowchartPage, text="กลับ", style="TButton", command=lambda: changePage(
     flowchartPage, homePage)).grid(row=4, column=1)
 
 # Start Program
